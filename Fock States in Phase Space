@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+!pip install qutip
+import qutip as qt
+from qutip import fock, plot_wigner
+
+
+# 1. Define the Hilbert space truncation dimension
+# For low photon numbers (0, 1, 2), N=10 is plenty.
+N = 10 
+
+# 2. Construct the states
+# .unit() normalizes the state automatically
+psi_adjacent = (fock(N, 0) + fock(N, 1)).unit()
+psi_non_adjacent = (fock(N, 0) + fock(N, 2)).unit()
+
+# 3. Set up the plotting grid
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# 4. Plot the Adjacent Superposition: |0> + |1>
+# Notice how the Wigner function is shifted off-center. This represents the non-zero mean field.
+plot_wigner(psi_adjacent, fig=fig, ax=axes[0])
+axes[0].set_title(r'Adjacent Superposition: $\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)$' + '\n(Non-zero mean field)')
+
+# 5. Plot the Non-Adjacent Superposition: |0> + |2>
+# Notice the 2-fold symmetry. The center of mass is strictly at the origin.
+plot_wigner(psi_non_adjacent, fig=fig, ax=axes[1])
+axes[1].set_title(r'Non-Adjacent Superposition: $\frac{1}{\sqrt{2}}(|0\rangle + |2\rangle)$' + '\n(Zero mean field)')
+
+plt.tight_layout()
+plt.show()
